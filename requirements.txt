@@ -1,0 +1,13 @@
+pandas~=1.2.0
+numpy~=1.19.5
+mypy~=0.770
+flake8~=3.8.1
+coverage~=5.1
+Werkzeug~=1.0.1
+blinker~=1.4
+json-rpc~=1.13.0
+gunicorn~=20.0.4
+Flask~=1.1.2
+sentence-transformers==0.3.3
+simplejson==3.17.2
+transformers==3.0.2

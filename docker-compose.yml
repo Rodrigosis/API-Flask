@@ -1,0 +1,20 @@
+version: '3.3'
+
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+      - GUNICORN_WORKERS=1
+      - GUNICORN_THREADS=5
+    networks:
+      - winenet
+
+networks:
+  winenet:
