@@ -8,7 +8,7 @@
   ```bash
   docker-compose up
   ```
-  
+
 ## Testing
 - rodar tests e verificação de tipagem e mau cheiro de código:
     ```bash
@@ -38,6 +38,15 @@ wine/
     Todas as informações mostradas abaixo estão no arquivo analyze.py dentro da pasta notebooks
 
 - Para compor a informação que o modelo utilizara para predição foram escolhidas 9 colunas contêm palavras chave, estas são: tipo, uvas, regiao, vinicola, amadurecimento, classificacao, visual e aroma.
+
+  #### Bibliotecas utilizadas
+  ```bash
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.feature_extraction.text import CountVectorizer
+    from joblib import dump, load
+  ```
 
   #### 1º Etapa:
 
