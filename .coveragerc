@@ -1,0 +1,20 @@
+# https://coverage.readthedocs.io/en/coverage-5.0.3/config.html
+
+[run]
+command_line = -m pytest
+source = ca/
+data_file = ./var/test/.coverage
+
+[report]
+# Don't include files in the report that are 100% covered files.
+skip_covered = True
+# Don't include empty files (those that have 0 statements) in the report.
+skip_empty = True
+# Sort the text report by the named column.
+sort = Cover
+
+[html]
+directory = ./var/test/coverage-html/
+
+[xml]
+output = ./var/test/coverage-xml/coverage.xml
