@@ -2,27 +2,26 @@ from jsonrpc import dispatcher, JSONRPCResponseManager
 from flask.views import View
 from flask import request
 from werkzeug.wrappers import Response
+from joblib import load
+import os
+
+from wine.domain.skl_logistic_regression import SklClassifier
+
+path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)) + '/infra/models/'
+model = load(path + 'modeloSKL2.joblib')
+vocabulary = load(path + 'VOC_modeloSKL2.joblib')
 
 
 @dispatcher.add_method
-def model_1():
-    return 'ok'
-
-
-@dispatcher.add_method
-def model_2():
-    return 'ok'
+def scikit_learn_params():
+    params = SklClassifier(model, vocabulary).params()
+    return params
 
 
 class RpcMetrics(View):
     methods = ['GET', 'POST']
-    """https://flask.palletsprojects.com/en/1.1.x/api/#class-based-views
-    https://json-rpc.readthedocs.io/en/latest/quickstart.html
-    https://json-rpc.readthedocs.io/en/latest/flask_integration.html
-    """
 
     def dispatch_request(self):
-        # Dispatcher is dictionary {<method_name>: callable}
         dispatcher["ping"] = lambda: "pong"
 
         try:
