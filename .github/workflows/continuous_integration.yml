@@ -1,0 +1,27 @@
+name: Continuous Integration
+on: [push]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build the docker-compose stack
+        run: docker-compose build
+
+      - name: Run the docker-compose stack
+        run: docker-compose up -d
+
+      - name: Check running containers
+        run: docker ps
+
+      - name: Lint
+        run: docker exec mlops_app_1 bash ./bin/lint.sh
+
+      - name: Run tests
+        run: docker exec mlops_app_1 bash ./bin/test.sh
+
+      - name: Print code coverage
+        run: docker exec mlops_app_1 coverage report

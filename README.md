@@ -1,57 +1,157 @@
-# Desafio Machine Learning Engineer
+## Setup
 
-Este desafio é uma parte do processo de seleção da [Birdie](http://birdie.ai).
-
-Seu objetivo é implementar um modelo de Machine Learning simples, considerando etapas básicas para um modelo.
-
-## Modelo de Machine Learning
-
-Desenvolver um modelo de regressão que seja capaz de predizer **a nota de um vinho** a partir de algumas caracteríticas do mesmo.
-Para tanto, deve-se utilizar o dataset **wine.csv** como base. Você terá liberdade para escolher as features que achar
-mais relevantes, bastando informá-las no README que for desenvolvido.
-
-
-## O que esperamos?
-
-Itens de 1 a 5 são *obrigatórios*.
-
-1. **Etapas de um modelo de Machine Learning**
-
-  Construir um modelo simples a partir do dataset escolhido. O foco principal **não é gerar o melhor modelo**, e sim criar as etapas básicas do mesmo e gravar um arquivo .pickle no final. Esse arquivo deverá ser usado para os passos posteriores.
-
-2. **Um endpoint /predict respondendo a um verbo HTTP GET**
-
-  Receber como payload as features que julgue relevantes para obtenção da predição, retornando o valor predito pelo algoritmo.
-
-3. **Um endpoint /metrics respondendo a um verbo HTTP GET**
-
-  Retornar uma lista chave/valor das métricas do modelo gerado.
-
-4. **README.md**
-
-  README com todo tipo de detalhe sobre a sua solução: diagrama técnico, lista de bibliotecas, referências, explicação de funcionamento, etc).
-
-5. **Outros**
-
-  - Criar um swagger com a descrição da API
-  - Testes na API
-  - Ambiente dockerizado
- 
-6. **Bônus(Desejável mas não mandatório)**
-
-  - Criar mais de um modelo pra realizar a predição
-  - Modificar o endpoint /predict pra incluir no request o modelo, e retornar o resultado correspondente.
+- Crie a imagem docker:
+  ```bash
+  docker-compose build
+  ```
+- Suba os containers:
+  ```bash
+  docker-compose up
+  ```
+  
+## Testing
+- rodar tests e verificação de tipagem e mau cheiro de código:
+    ```bash
+        docker-compose exec app bash ./bin/ci.sh
+    ``` 
+- rodar somente verificação de tipagem e mau cheiro de código:
+    ```bash
+        docker-compose exec app bash ./bin/lint.sh
+    ``` 
+- rodar somente tests:
+    ```bash
+        docker-compose exec app bash ./bin/test.sh
+    ``` 
 
 
-## Como participar?
+## Arquitetura
+```console
+wine/
+├── application/  # Camada que recebe uma entrada do mundo externo, manipula o domain e retorna algo para o mundo externo.
+├── domain/  # Camada onde os dados recebidos do mundo externo são processados (aqui é onde os modelos de ML estão localizados).
+└── infra/  # Camada onde ficam elementos infraestrutura que ajudam o serviço a funcionar (banco de dados, cache, framework web, etc).
+    └── models/  # Camada onde são armazenados arquivos de treino para serem carregados em memória.
+```
 
-- Dê um fork neste repositório.
-- Clone o fork na sua máquina.
-- Crie em seu repositório um README.md descrevendo os passos para treinar seu dataset, descrevendo de forma sucinta as etapas até o modelo final.
-Assim que concluir, Abra uma issue neste repositório com o título '[DESAFIO Machine Learning Engineer] {{Seu nome}}'.
-No conteúdo da issue faça qualquer comentário sobre como foi sua experiência na execução do teste(sugestões, elogios, críticas, etc).
-Assim que sua issue for aberta, alguém de nosso time técnico da Birdie irá analisar seu desafio, e eventualmente esteja preparado para defender a solução que construiu.
+## Modelo
 
-Quanto mais informações tivermos no README.md, melhor conseguiremos te avaliar.
+    Todas as informações mostradas abaixo estão no arquivo analyze.py dentro da pasta notebooks
 
-Aguardamos seu desafio, e boa sorte!
+- Para compor a informação que o modelo utilizara para predição foram escolhidas 9 colunas contêm palavras chave, estas são: tipo, uvas, regiao, vinicola, amadurecimento, classificacao, visual e aroma.
+
+  #### 1º Etapa:
+
+    - Concatenar as sentenças:
+    ```bash
+        data = []
+        for i in range(len(nota)):
+            text = ''
+            for n in [tipo, uvas, regiao, vinicola, amadurecimento, classificacao, visual, aroma]:
+                text = text + ' ' + str(n[i])
+            data.append(text)
+    ```
+
+  #### 2º Etapa:
+
+    - Vetorizar o texto:
+    ```bash
+        vetorizar = CountVectorizer(lowercase=False, max_features=10000)
+        bag_of_words = vetorizar.fit_transform(data)
+    ```
+
+  #### 3º Etapa:
+
+    - Separa os dados em dados de treino e teste:
+    ```bash
+        treino, teste, classe_treino, classe_teste = train_test_split(bag_of_words, nota, random_state = 42, test_size=0.4)
+    ```
+
+  #### 4º Etapa:
+
+    - Treinar o modelo:
+    ```bash
+        regressao_logistica = LogisticRegression(solver='lbfgs')
+        regressao_logistica.fit(treino.astype('int'), classe_treino.astype('int'))
+    ```
+
+  #### 5º Etapa:
+
+    - Salvar o modelo treinado para ser usado posteriormente:
+    ```bash
+        modelo = regressao_logistica
+        dump(modelo, 'modeloSKL2.joblib')
+        dump(vetorizar.vocabulary_, 'VOC_modeloSKL2.joblib')
+    ```
+
+  #### 6º Etapa:
+
+    - retornar a acurácia do modelo:
+    ```bash
+        return regressao_logistica.score(teste.astype('int'), classe_teste.astype('int'))
+  
+        >>> 0.44813278008298757
+    ```
+
+  #### 7º Etapa:
+
+    - Carregando os modelos salvos:
+    ```bash
+        SKLdescription = load('modeloSKL2.joblib') #MODELO
+        VOC_SKLdescription = load('VOC_modeloSKL2.joblib') #VOCABULARIO
+    ```
+
+  #### 8º Etapa:
+
+    - Criando função para predição com os modelos salvos:
+    ```bash
+        def predict(tipo, uvas, regiao, vinicola, amadurecimento, classificacao, visual, aroma, model, vocabulary): 
+            text = ''
+            for n in [tipo, uvas, regiao, vinicola, amadurecimento, classificacao, visual, aroma]:
+                text = text + ' ' + str(n)
+            
+            vetorizar = CountVectorizer(lowercase=False, vocabulary=vocabulary)
+            bag_of_words = vetorizar.transform([text])
+        
+            return model.predict(bag_of_words)
+    ```
+
+  #### 9º Etapa:
+
+    - Realizando predições:
+    ```bash
+        tipo = "Licoroso"
+        uvas = "Castas tradicionais no Douro"
+        regiao = "Douro"
+        vinicola = "Burmester"
+        amadurecimento = "40 anos em barricas de carvalho"
+        classificacao = "Suave/Doce"
+        visual = "Acastanhado"
+        aroma = "Intenso, frutas secas, especiarias,mel"
+        
+        predict(tipo, uvas, regiao, vinicola, amadurecimento, classificacao, visual, aroma, SKLdescription, VOC_SKLdescription)
+
+        >>> array([4])
+    ```
+
+  #### 10º Etapa:
+
+    - Consultando parâmetros do modelo:
+    ```bash
+        SKLdescription.get_params(deep=True)
+  
+        >>> {'C': 1.0,
+             'class_weight': None,
+             'dual': False,
+             'fit_intercept': True,
+             'intercept_scaling': 1,
+             'l1_ratio': None,
+             'max_iter': 100,
+             'multi_class': 'auto',
+             'n_jobs': None,
+             'penalty': 'l2',
+             'random_state': None,
+             'solver': 'lbfgs',
+             'tol': 0.0001,
+             'verbose': 0,
+             'warm_start': False}
+    ```

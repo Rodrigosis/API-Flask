@@ -1,5 +1,4 @@
 #%%
-from numpy.core.fromnumeric import ptp
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -9,8 +8,6 @@ from joblib import dump, load
 #%%
 data = pd.read_csv('wine.csv')
 data.head(5)
-
-# tipo, uvas, regiao, vinicola, amadurecimento, classificacao, visual, aroma
 
 #%%
 def classificar(tipo, uvas, regiao, vinicola, amadurecimento, classificacao, visual, aroma, nota):
