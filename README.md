@@ -8,6 +8,28 @@
   ```bash
   docker-compose up
   ```
+- Realizar chamadas via terminal:
+    - Chamada GET para predição:
+      ```bash
+      echo '{"method": "scikit_learn",
+             "params": {"tipo": "Licoroso",
+                        "uvas": "Castas tradicionais no Douro",
+                        "regiao": "Douro",
+                        "vinicola": "Burmester",
+                        "amadurecimento": "40 anos em barricas de carvalho",
+                       "classificacao": "Suave/Doce",
+                       "visual": "Acastanhado",
+                       "aroma": "Intenso, frutas secas, especiarias,mel"},
+            "jsonrpc": "2.0",
+            "id": 0}' | http GET http://localhost:80/predict/ content-type:application/json
+      ```
+    - Chamada GET para obter os parâmetros do modelo:
+      ```bash
+      echo '{"method": "scikit_learn_params", 
+             "params": {}, 
+             "jsonrpc": "2.0", 
+             "id": 0 }' | http GET http://localhost:80/metrics/ content-type:application/json
+      ```
 
 ## Testing
 - rodar tests e verificação de tipagem e mau cheiro de código:
