@@ -33,23 +33,29 @@ def test_scikit_learn_params(client):
 
     rpc_response = json.loads(response.data)
     assert 'result' in rpc_response
-    assert len(rpc_response['result']) == 15
+    assert len(rpc_response['result']) == 2
 
-    assert 'C' in rpc_response['result']
-    assert 'class_weight' in rpc_response['result']
-    assert 'dual' in rpc_response['result']
-    assert 'fit_intercept' in rpc_response['result']
-    assert 'intercept_scaling' in rpc_response['result']
-    assert 'l1_ratio' in rpc_response['result']
-    assert 'max_iter' in rpc_response['result']
-    assert 'multi_class' in rpc_response['result']
-    assert 'n_jobs' in rpc_response['result']
-    assert 'penalty' in rpc_response['result']
-    assert 'random_state' in rpc_response['result']
-    assert 'solver' in rpc_response['result']
-    assert 'tol' in rpc_response['result']
-    assert 'verbose' in rpc_response['result']
-    assert 'warm_start' in rpc_response['result']
+    assert type(rpc_response['result']['accuracy']) == float
+
+    model_params = rpc_response['result']['model_params']
+
+    assert len(model_params) == 15
+
+    assert 'C' in model_params
+    assert 'class_weight' in model_params
+    assert 'dual' in model_params
+    assert 'fit_intercept' in model_params
+    assert 'intercept_scaling' in model_params
+    assert 'l1_ratio' in model_params
+    assert 'max_iter' in model_params
+    assert 'multi_class' in model_params
+    assert 'n_jobs' in model_params
+    assert 'penalty' in model_params
+    assert 'random_state' in model_params
+    assert 'solver' in model_params
+    assert 'tol' in model_params
+    assert 'verbose' in model_params
+    assert 'warm_start' in model_params
 
 
 # flake8: noqa

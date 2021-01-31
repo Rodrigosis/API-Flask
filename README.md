@@ -22,6 +22,15 @@
                        "aroma": "Intenso, frutas secas, especiarias,mel"},
             "jsonrpc": "2.0",
             "id": 0}' | http GET http://localhost:80/predict/ content-type:application/json
+      
+      >>> {
+            "id": 0,
+            "jsonrpc": "2.0",
+            "result": {
+                "nota": "4"
+            }
+          }
+
       ```
     - Chamada GET para obter os parâmetros do modelo:
       ```bash
@@ -29,6 +38,31 @@
              "params": {}, 
              "jsonrpc": "2.0", 
              "id": 0 }' | http GET http://localhost:80/metrics/ content-type:application/json
+      
+      >>> {
+            "id": 0,
+            "jsonrpc": "2.0",
+            "result": {
+                "accuracy": 0.44813278008298757,
+                "model_params": {
+                      "C": 1.0,
+                      "class_weight": null,
+                      "dual": false,
+                      "fit_intercept": true,
+                      "intercept_scaling": 1,
+                      "l1_ratio": null,
+                      "max_iter": 100,
+                      "multi_class": "auto",
+                      "n_jobs": null,
+                      "penalty": "l2",
+                      "random_state": null,
+                      "solver": "lbfgs",
+                      "tol": 0.0001,
+                      "verbose": 0,
+                      "warm_start": false
+                }
+            }
+          }
       ```
 
 ## Testing

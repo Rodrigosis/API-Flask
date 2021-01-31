@@ -38,18 +38,20 @@ def test_predict():
 def test_params():
     params = SklClassifier(model, vocabulary).params()
 
-    assert params['C'] == 1.0
-    assert params['class_weight'] is None
-    assert params['dual'] is False
-    assert params['fit_intercept'] is True
-    assert params['intercept_scaling'] == 1
-    assert params['l1_ratio'] is None
-    assert params['max_iter'] == 100
-    assert params['multi_class'] == 'auto'
-    assert params['n_jobs'] is None
-    assert params['penalty'] == 'l2'
-    assert params['random_state'] is None
-    assert params['solver'] == 'lbfgs'
-    assert params['tol'] == 0.0001
-    assert params['verbose'] == 0
-    assert params['warm_start'] is False
+    assert type(params['accuracy']) == float
+
+    assert params['model_params']['C'] == 1.0
+    assert params['model_params']['class_weight'] is None
+    assert params['model_params']['dual'] is False
+    assert params['model_params']['fit_intercept'] is True
+    assert params['model_params']['intercept_scaling'] == 1
+    assert params['model_params']['l1_ratio'] is None
+    assert params['model_params']['max_iter'] == 100
+    assert params['model_params']['multi_class'] == 'auto'
+    assert params['model_params']['n_jobs'] is None
+    assert params['model_params']['penalty'] == 'l2'
+    assert params['model_params']['random_state'] is None
+    assert params['model_params']['solver'] == 'lbfgs'
+    assert params['model_params']['tol'] == 0.0001
+    assert params['model_params']['verbose'] == 0
+    assert params['model_params']['warm_start'] is False

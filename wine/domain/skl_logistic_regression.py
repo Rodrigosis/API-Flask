@@ -19,4 +19,4 @@ class SklClassifier:
         return self.model.predict(bag_of_words)
 
     def params(self):
-        return self.model.get_params(deep=True)
+        return {"accuracy": 0.44813278008298757, "model_params": self.model.get_params(deep=True)}

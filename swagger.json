@@ -1,0 +1,170 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a simple API",
+    "version": "1.0.0",
+    "title": "Desafio Machine Learning Engineer"
+  },
+  "host": "virtserver.swaggerhub.com",
+  "basePath": "/rodrigo_sis/Desafio_Machine_Learning_Engineer/1.0.0",
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/predict": {
+      "get": {
+        "tags": [
+          "Predict"
+        ],
+        "description": "Este método retorna uma nota para o vinho com base nas suas características\n",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "tipo",
+            "in": "query",
+            "description": "Tipo do vinho",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uvas",
+            "in": "query",
+            "description": "Uvas usadas",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "regiao",
+            "in": "query",
+            "description": "Região em que foi fabricado",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "vinicola",
+            "in": "query",
+            "description": "Vinícola em que foi produzido",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "amadurecimento",
+            "in": "query",
+            "description": "Técnica de amadurecimento utilizada",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "classificacao",
+            "in": "query",
+            "description": "Classificação do vinho",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "visual",
+            "in": "query",
+            "description": "Aparência do vinho",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "aroma",
+            "in": "query",
+            "description": "Aroma do vinho",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "search results matching criteria"
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        }
+      }
+    },
+    "/metrics": {
+      "get": {
+        "tags": [
+          "Predict"
+        ],
+        "description": "Este método retorna as métricas do modelo\n",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "search results matching criteria"
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "SklClassifier": {
+      "type": "object",
+      "required": [
+        "amadurecimento",
+        "aroma",
+        "classificacao",
+        "regiao",
+        "tipo",
+        "uvas",
+        "vinicola",
+        "visual"
+      ],
+      "properties": {
+        "tipo": {
+          "type": "string",
+          "format": "text",
+          "example": "Tinto"
+        },
+        "uvas": {
+          "type": "string",
+          "format": "text",
+          "example": "Tannat (100%)"
+        },
+        "regiao": {
+          "type": "string",
+          "format": "text",
+          "example": "Champagne"
+        },
+        "vinicola": {
+          "type": "string",
+          "format": "text",
+          "example": "Jacquart"
+        },
+        "amadurecimento": {
+          "type": "string",
+          "format": "text",
+          "example": "Método Tradicional (Segunda fermentação em garrafa)."
+        },
+        "classificacao": {
+          "type": "string",
+          "format": "text",
+          "example": "Brut"
+        },
+        "visual": {
+          "type": "string",
+          "format": "text",
+          "example": "Salmão. Perlage fina e delicada."
+        },
+        "aroma": {
+          "type": "string",
+          "format": "text",
+          "example": "Groselha, cereja, morango e ameixa, com leves notas de pão."
+        }
+      }
+    }
+  }
+}
