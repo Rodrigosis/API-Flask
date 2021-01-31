@@ -33,9 +33,14 @@ def test_scikit_learn_params(client):
 
     rpc_response = json.loads(response.data)
     assert 'result' in rpc_response
-    assert len(rpc_response['result']) == 2
+    assert len(rpc_response['result']) == 6
 
-    assert type(rpc_response['result']['accuracy']) == float
+    assert 'accuracy' in rpc_response['result']
+    assert 'confusion_matrix' in rpc_response['result']
+    assert 'precision' in rpc_response['result']
+    assert 'recall' in rpc_response['result']
+    assert 'f1-score' in rpc_response['result']
+    assert 'model_params' in rpc_response['result']
 
     model_params = rpc_response['result']['model_params']
 

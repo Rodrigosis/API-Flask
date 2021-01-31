@@ -39,6 +39,11 @@ def test_params():
     params = SklClassifier(model, vocabulary).params()
 
     assert type(params['accuracy']) == float
+    assert type(params['confusion_matrix']) == list
+    assert type(params['precision']) == dict
+    assert type(params['recall']) == dict
+    assert type(params['f1-score']) == dict
+    assert type(params['model_params']) == dict
 
     assert params['model_params']['C'] == 1.0
     assert params['model_params']['class_weight'] is None

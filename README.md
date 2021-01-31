@@ -44,23 +44,49 @@
             "jsonrpc": "2.0",
             "result": {
                 "accuracy": 0.44813278008298757,
+                "confusion_matrix": [[0, 0, 0, 0, 0],
+                                     [0, 0, 0, 1, 0],
+                                     [1, 7, 27, 36, 14],
+                                     [3, 7, 32, 74, 18],
+                                     [0, 1, 3, 10, 7]],
+                "f1-score": {
+                              "1": 0,
+                              "2": 0,
+                              "3": 0.37,
+                              "4": 0.58,
+                              "5": 0.23
+                            },
                 "model_params": {
-                      "C": 1.0,
-                      "class_weight": null,
-                      "dual": false,
-                      "fit_intercept": true,
-                      "intercept_scaling": 1,
-                      "l1_ratio": null,
-                      "max_iter": 100,
-                      "multi_class": "auto",
-                      "n_jobs": null,
-                      "penalty": "l2",
-                      "random_state": null,
-                      "solver": "lbfgs",
-                      "tol": 0.0001,
-                      "verbose": 0,
-                      "warm_start": false
-                }
+                                  "C": 1.0,
+                                  "class_weight": null,
+                                  "dual": false,
+                                  "fit_intercept": true,
+                                  "intercept_scaling": 1,
+                                  "l1_ratio": null,
+                                  "max_iter": 100,
+                                  "multi_class": "auto",
+                                  "n_jobs": null,
+                                  "penalty": "l2",
+                                  "random_state": null,
+                                  "solver": "lbfgs",
+                                  "tol": 0.0001,
+                                  "verbose": 0,
+                                  "warm_start": false
+                                },
+                "precision": {
+                              "1": 0,
+                              "2": 0,
+                              "3": 0.44,
+                              "4": 0.61,
+                              "5": 0.18
+                            },
+                "recall": {
+                            "1": 0,
+                            "2": 0,
+                            "3": 0.32,
+                            "4": 0.55,
+                            "5": 0.33
+                          }
             }
           }
       ```
@@ -150,11 +176,31 @@ wine/
 
   #### 6º Etapa:
 
-    - retornar a acurácia do modelo:
+    - printar métricas do modelo:
     ```bash
-        return regressao_logistica.score(teste.astype('int'), classe_teste.astype('int'))
-  
+        regressao_logistica.score(teste.astype('int'), classe_teste.astype('int'))
         >>> 0.44813278008298757
+  
+        x = modelo.predict(teste)
+        confusion_matrix(x.astype('int'), classe_teste.astype('int'))
+        >>> [[ 0  0  0  0  0]
+             [ 0  0  0  1  0]
+             [ 1  7 27 36 14]
+             [ 3  7 32 74 18]
+             [ 0  1  3 10  7]]
+  
+        classification_report(x.astype('int'), classe_teste.astype('int'))
+        >>>               precision    recall  f1-score   support
+
+                       1       0.00      0.00      0.00         0
+                       2       0.00      0.00      0.00         1
+                       3       0.44      0.32      0.37        85
+                       4       0.61      0.55      0.58       134
+                       5       0.18      0.33      0.23        21
+            
+                accuracy                           0.45       241
+               macro avg       0.25      0.24      0.24       241
+            weighted avg       0.51      0.45      0.47       241
     ```
 
   #### 7º Etapa:
